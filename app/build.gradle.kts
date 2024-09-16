@@ -63,4 +63,27 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Compose Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    // Accompanist Navigation Animation [DEPRECATED]
+//    implementation "com.google.accompanist:accompanist-navigation-animation:0.22.0-rc"
+
+    // Room components
+    implementation(libs.androidx.room.runtime)
+//    implementation(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // DataStore Preferences
+    implementation(libs.androidx.datastore.preferences)
+
+    // Dagger - Hilt
+    implementation(libs.hilt.android)
+//    implementation(libs.hilt.compiler)
+
+//    kapt "com.google.dagger:hilt-android-compiler:2.38.1"
+//    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+
+    // Splash API
+    implementation(libs.androidx.core.splashscreen)
 }
