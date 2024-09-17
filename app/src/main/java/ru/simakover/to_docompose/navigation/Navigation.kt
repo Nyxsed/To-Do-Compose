@@ -12,8 +12,8 @@ import ru.simakover.to_docompose.util.Constants.LIST_SCREEN
 fun SetupNavigation(
     navController: NavHostController
 ) {
-    val screen = remember(navController) {
-        Screens(navController)
+    val routes = remember(navController) {
+        Routes(navController)
     }
 
     NavHost(
@@ -21,10 +21,10 @@ fun SetupNavigation(
         startDestination = LIST_SCREEN
     ) {
         listComposable(
-            navigateToTaskScreen = screen.task
+            navigateToTaskScreen = routes.toTaskScreen
         )
         taskComposable(
-            navigateToListScreen = screen.list
+            navigateToListScreen = routes.toListScreen
         )
     }
 }
