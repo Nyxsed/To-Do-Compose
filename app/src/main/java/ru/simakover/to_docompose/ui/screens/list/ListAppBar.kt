@@ -1,8 +1,11 @@
 package ru.simakover.to_docompose.ui.screens.list
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -18,6 +21,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -27,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -88,7 +94,8 @@ fun DefaultListAppBar(
         ),
         title = {
             Text(
-                text = "Tasks"
+                text = "Tasks",
+                color = Color.LightGray
             )
         },
         actions = {
@@ -124,6 +131,7 @@ fun SearchAction(
         Icon(
             imageVector = Icons.Filled.Search,
             contentDescription = stringResource(R.string.search_tasks),
+            tint = Color.LightGray
         )
     }
 }
@@ -139,7 +147,8 @@ fun SortAction(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_filter_list_24),
-            contentDescription = stringResource(R.string.sort_tasks)
+            contentDescription = stringResource(R.string.sort_tasks),
+            tint = Color.LightGray
         )
         DropdownMenu(
             expanded = expanded,
@@ -181,7 +190,8 @@ fun DeleteAllAction(
     ) {
         Icon(
             imageVector = Icons.Filled.MoreVert,
-            contentDescription = stringResource(R.string.sort_tasks)
+            contentDescription = stringResource(R.string.sort_tasks),
+            tint = Color.LightGray
         )
         DropdownMenu(
             expanded = expanded,
@@ -205,6 +215,7 @@ fun DeleteAllAction(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchAppBar(
     text: String,
@@ -216,11 +227,22 @@ fun SearchAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(TOP_APP_BAR_HEIGHT),
-        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.primary
     ) {
         TextField(
             modifier = Modifier
                 .fillMaxWidth(),
+            colors = TextFieldDefaults.colors(
+                cursorColor = Color.LightGray,
+                focusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                errorContainerColor = Color.Transparent,
+                focusedTextColor = Color.LightGray
+            ),
             value = text,
             onValueChange = {
                 onTextChange(it)
@@ -229,7 +251,8 @@ fun SearchAppBar(
                 Text(
                     modifier = Modifier
                         .alpha(0.5f),
-                    text = stringResource(R.string.search)
+                    text = stringResource(R.string.search),
+                    color = Color.LightGray
                 )
             },
             textStyle = TextStyle(
@@ -246,7 +269,8 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Search,
-                        contentDescription = stringResource(R.string.search_icon)
+                        contentDescription = stringResource(R.string.search_icon),
+                        tint = Color.LightGray
                     )
                 }
             },
@@ -258,7 +282,8 @@ fun SearchAppBar(
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = stringResource(R.string.clear)
+                        contentDescription = stringResource(R.string.clear),
+                        tint = Color.LightGray
                     )
                 }
             },
