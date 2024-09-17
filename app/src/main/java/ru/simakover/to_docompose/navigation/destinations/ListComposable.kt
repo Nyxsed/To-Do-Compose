@@ -11,7 +11,7 @@ import ru.simakover.to_docompose.util.Constants.LIST_SCREEN
 
 fun NavGraphBuilder.listComposable(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-//    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel
 ) {
     composable(
         route = LIST_SCREEN,
@@ -19,7 +19,7 @@ fun NavGraphBuilder.listComposable(
     ) {
         ListScreen(
             navigateToTaskScreen = navigateToTaskScreen,
-//            sharedViewModel = sharedViewModel
+            sharedViewModel = sharedViewModel
         )
     }
 }

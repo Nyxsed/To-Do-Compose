@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.simakover.to_docompose.navigation.SetupNavigation
 import ru.simakover.to_docompose.ui.theme.ToDoComposeTheme
 import ru.simakover.to_docompose.ui.viewmodels.SharedViewModel
+import ru.simakover.to_docompose.util.SearchAppBarState
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

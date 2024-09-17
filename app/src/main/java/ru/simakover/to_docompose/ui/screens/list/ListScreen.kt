@@ -17,18 +17,18 @@ import ru.simakover.to_docompose.util.SearchAppBarState
 @Composable
 fun ListScreen(
     navigateToTaskScreen: (taskId: Int) -> Unit,
-//    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel
 ) {
-//    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
-//    val searchTextState: String by sharedViewModel.searchTextState
+    val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
+    val searchTextState: String by sharedViewModel.searchTextState
 
     Scaffold(
         content = {},
         topBar = {
             ListAppBar(
-//                sharedViewModel = sharedViewModel,
-//                searchAppBarState = searchAppBarState,
-//                searchTextState = searchTextState
+                sharedViewModel = sharedViewModel,
+                searchAppBarState = searchAppBarState,
+                searchTextState = searchTextState
             )
         },
         floatingActionButton = {

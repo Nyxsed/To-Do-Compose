@@ -44,34 +44,34 @@ import ru.simakover.to_docompose.util.SearchAppBarState
 
 @Composable
 fun ListAppBar(
-//    sharedViewModel: SharedViewModel,
-//    searchAppBarState: SearchAppBarState,
-//    searchTextState: String
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: SearchAppBarState,
+    searchTextState: String
 ) {
-//    when(searchAppBarState) {
-//        SearchAppBarState.CLOSED -> {
-//            DefaultListAppBar(
-//                onSearchClicked = {
-//                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
-//                },
-//                onSortClicked = {},
-//                onDeleteClicked = {}
-//            )
-//        }
-//        else ->{
-//            SearchAppBar(
-//                text = searchTextState,
-//                onTextChange = { newText ->
-//                    sharedViewModel.searchTextState.value = newText
-//                },
-//                onCloseClicked = {
-//                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
-//                    sharedViewModel.searchTextState.value = ""
-//                },
-//                onSearchClicked = {}
-//            )
-//        }
-//    }
+    when(searchAppBarState) {
+        SearchAppBarState.CLOSED -> {
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                },
+                onSortClicked = {},
+                onDeleteClicked = {}
+            )
+        }
+        else ->{
+            SearchAppBar(
+                text = searchTextState,
+                onTextChange = { newText ->
+                    sharedViewModel.searchTextState.value = newText
+                },
+                onCloseClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
+                    sharedViewModel.searchTextState.value = ""
+                },
+                onSearchClicked = {}
+            )
+        }
+    }
 
 }
 
