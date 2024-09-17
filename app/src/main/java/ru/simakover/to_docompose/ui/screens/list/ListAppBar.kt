@@ -1,11 +1,8 @@
 package ru.simakover.to_docompose.ui.screens.list
 
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -21,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -38,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import ru.simakover.to_docompose.R
 import ru.simakover.to_docompose.components.PriorityItem
 import ru.simakover.to_docompose.data.models.Priority
@@ -47,6 +42,7 @@ import ru.simakover.to_docompose.ui.theme.TOP_APP_BAR_HEIGHT
 import ru.simakover.to_docompose.ui.theme.Typography
 import ru.simakover.to_docompose.ui.viewmodels.SharedViewModel
 import ru.simakover.to_docompose.util.SearchAppBarState
+import ru.simakover.to_docompose.util.TrailingIconState
 
 @Composable
 fun ListAppBar(
@@ -54,7 +50,7 @@ fun ListAppBar(
     searchAppBarState: SearchAppBarState,
     searchTextState: String
 ) {
-    when(searchAppBarState) {
+    when (searchAppBarState) {
         SearchAppBarState.CLOSED -> {
             DefaultListAppBar(
                 onSearchClicked = {
@@ -64,7 +60,8 @@ fun ListAppBar(
                 onDeleteClicked = {}
             )
         }
-        else ->{
+
+        else -> {
             SearchAppBar(
                 text = searchTextState,
                 onTextChange = { newText ->
@@ -223,6 +220,10 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (text: String) -> Unit,
 ) {
+    var trailingIconState by remember {
+        mutableStateOf(TrailingIconState.READY_TO_DELETE)
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -277,7 +278,11 @@ fun SearchAppBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        onCloseClicked()
+                        if(text.isNotEmpty()) {
+                            onTextChange("")
+                        } else {
+                            onCloseClicked()
+                        }
                     }
                 ) {
                     Icon(
