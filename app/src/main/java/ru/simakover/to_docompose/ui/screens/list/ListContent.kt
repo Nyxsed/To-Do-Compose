@@ -32,17 +32,24 @@ fun ListContent(
     tasks: List<ToDoTask>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    LazyColumn{
-        items(
-            items = tasks,
-            key = { task ->
-                task.id
+    when(tasks) {
+        emptyList<ToDoTask>() -> {
+            EmptyContent()
+        }
+        else -> {
+            LazyColumn{
+                items(
+                    items = tasks,
+                    key = { task ->
+                        task.id
+                    }
+                ) { task ->
+                    TaskItem(
+                        toDoTask = task,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
+                }
             }
-        ) { task ->
-            TaskItem(
-                toDoTask = task,
-                navigateToTaskScreen = navigateToTaskScreen
-            )
         }
     }
 }
