@@ -1,15 +1,19 @@
 package ru.simakover.to_docompose.navigation.destinations
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import ru.simakover.to_docompose.ui.screens.task.TaskScreen
+import ru.simakover.to_docompose.ui.viewmodels.SharedViewModel
 import ru.simakover.to_docompose.util.Action
 import ru.simakover.to_docompose.util.Constants.TASK_ARGUMENT_KEY
 import ru.simakover.to_docompose.util.Constants.TASK_SCREEN
 
 fun NavGraphBuilder.taskComposable(
+    sharedViewModel: SharedViewModel,
     navigateToListScreen: (Action) -> Unit
 ) {
     composable(
@@ -18,7 +22,11 @@ fun NavGraphBuilder.taskComposable(
     ) { navBackStackEntry ->
         val taskId = navBackStackEntry.arguments!!.getInt(TASK_ARGUMENT_KEY)
 
+        sharedViewModel.getSelectedTask(taskId)
+        val selectedTask by sharedViewModel.selectedTask.collectAsState()
+
         TaskScreen(
+            selectedTask,
             navigateToListScreen
         )
     }
