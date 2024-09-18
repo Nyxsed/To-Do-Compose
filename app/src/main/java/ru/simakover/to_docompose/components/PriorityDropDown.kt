@@ -53,7 +53,8 @@ fun PriorityDropDown(
             }
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.55f),
+                shape = MaterialTheme.shapes.extraSmall
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -84,7 +85,7 @@ fun PriorityDropDown(
         }
         DropdownMenu(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth(fraction = 0.94f),
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {

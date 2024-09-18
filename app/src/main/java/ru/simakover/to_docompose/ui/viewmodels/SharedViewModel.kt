@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import ru.simakover.to_docompose.data.models.Priority
 import ru.simakover.to_docompose.data.models.ToDoTask
 import ru.simakover.to_docompose.data.repositories.ToDoRepository
 import ru.simakover.to_docompose.util.RequestState
@@ -18,6 +19,11 @@ import javax.inject.Inject
 class SharedViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
+
+    val id : MutableState<Int> = mutableStateOf(0)
+    val title : MutableState<String> = mutableStateOf("")
+    val description : MutableState<String> = mutableStateOf("")
+    val priority: MutableState<Priority> = mutableStateOf(Priority.NONE)
 
     val searchAppBarState: MutableState<SearchAppBarState> = mutableStateOf(SearchAppBarState.CLOSED)
     val searchTextState: MutableState<String> = mutableStateOf("")
@@ -47,6 +53,20 @@ class SharedViewModel @Inject constructor(
             repository.getSelectedTask(taskId).collect { task ->
                 _selectedTask.value = task
             }
+        }
+    }
+
+    fun updateTaskFields(selectedTask: ToDoTask?) {
+        if(selectedTask != null) {
+            id.value = selectedTask.id
+            title.value = selectedTask.title
+            description.value = selectedTask.description
+            priority.value = selectedTask.priority
+        } else {
+            id.value = 0
+            title.value = ""
+            description.value = ""
+            priority.value = Priority.LOW
         }
     }
 }

@@ -1,5 +1,6 @@
 package ru.simakover.to_docompose.navigation.destinations
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraphBuilder
@@ -25,7 +26,12 @@ fun NavGraphBuilder.taskComposable(
         sharedViewModel.getSelectedTask(taskId)
         val selectedTask by sharedViewModel.selectedTask.collectAsState()
 
+        LaunchedEffect(key1 = taskId) {
+            sharedViewModel.updateTaskFields(selectedTask)
+        }
+
         TaskScreen(
+            sharedViewModel,
             selectedTask,
             navigateToListScreen
         )
