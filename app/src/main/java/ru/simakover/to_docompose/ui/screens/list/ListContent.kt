@@ -26,32 +26,37 @@ import ru.simakover.to_docompose.data.models.Priority
 import ru.simakover.to_docompose.data.models.ToDoTask
 import ru.simakover.to_docompose.ui.theme.LARGE_PADDING
 import ru.simakover.to_docompose.ui.theme.PRIORITY_INDICATOR_SIZE
+import ru.simakover.to_docompose.util.RequestState
 
 @Composable
 fun ListContent(
-    tasks: List<ToDoTask>,
+    tasks: RequestState<List<ToDoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    when(tasks) {
-        emptyList<ToDoTask>() -> {
-            EmptyContent()
-        }
-        else -> {
-            LazyColumn{
-                items(
-                    items = tasks,
-                    key = { task ->
-                        task.id
+    if(tasks is RequestState.Success) {
+        when(tasks.data) {
+            emptyList<ToDoTask>() -> {
+                EmptyContent()
+            }
+            else -> {
+                LazyColumn{
+                    items(
+                        items = tasks.data,
+                        key = { task->
+                            task.id
+                        }
+                    ) { task ->
+                        TaskItem(
+                            toDoTask = task,
+                            navigateToTaskScreen = navigateToTaskScreen
+                        )
                     }
-                ) { task ->
-                    TaskItem(
-                        toDoTask = task,
-                        navigateToTaskScreen = navigateToTaskScreen
-                    )
                 }
             }
         }
     }
+
+
 }
 
 @Composable
