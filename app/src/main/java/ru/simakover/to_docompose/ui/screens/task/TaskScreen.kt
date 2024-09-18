@@ -15,7 +15,7 @@ fun TaskScreen(
                 navigateToListScreen
             )
         },
-        content = {
+        content = { padding ->
 
         }
     )
