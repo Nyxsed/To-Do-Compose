@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import ru.simakover.to_docompose.data.models.Priority
 import ru.simakover.to_docompose.data.models.ToDoTask
 import ru.simakover.to_docompose.data.repositories.ToDoRepository
+import ru.simakover.to_docompose.util.Constants.MAX_TITLE_LENGTH
 import ru.simakover.to_docompose.util.RequestState
 import ru.simakover.to_docompose.util.SearchAppBarState
 import javax.inject.Inject
@@ -20,9 +21,9 @@ class SharedViewModel @Inject constructor(
     private val repository: ToDoRepository
 ) : ViewModel() {
 
-    val id : MutableState<Int> = mutableStateOf(0)
-    val title : MutableState<String> = mutableStateOf("")
-    val description : MutableState<String> = mutableStateOf("")
+    val id: MutableState<Int> = mutableStateOf(0)
+    val title: MutableState<String> = mutableStateOf("")
+    val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.NONE)
 
     val searchAppBarState: MutableState<SearchAppBarState> = mutableStateOf(SearchAppBarState.CLOSED)
@@ -57,7 +58,7 @@ class SharedViewModel @Inject constructor(
     }
 
     fun updateTaskFields(selectedTask: ToDoTask?) {
-        if(selectedTask != null) {
+        if (selectedTask != null) {
             id.value = selectedTask.id
             title.value = selectedTask.title
             description.value = selectedTask.description
@@ -68,5 +69,15 @@ class SharedViewModel @Inject constructor(
             description.value = ""
             priority.value = Priority.LOW
         }
+    }
+
+    fun updateTitle(newTitle: String) {
+        if (newTitle.length < MAX_TITLE_LENGTH) {
+            title.value = newTitle
+        }
+    }
+
+    fun validateFields(): Boolean {
+        return title.value.isNotEmpty() && description.value.isNotEmpty()
     }
 }
