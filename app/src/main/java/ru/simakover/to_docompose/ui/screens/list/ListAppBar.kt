@@ -41,6 +41,7 @@ import ru.simakover.to_docompose.ui.theme.LARGE_PADDING
 import ru.simakover.to_docompose.ui.theme.TOP_APP_BAR_HEIGHT
 import ru.simakover.to_docompose.ui.theme.Typography
 import ru.simakover.to_docompose.ui.viewmodels.SharedViewModel
+import ru.simakover.to_docompose.util.Action
 import ru.simakover.to_docompose.util.SearchAppBarState
 import ru.simakover.to_docompose.util.TrailingIconState
 
@@ -57,7 +58,9 @@ fun ListAppBar(
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
                 onSortClicked = {},
-                onDeleteClicked = {}
+                onDeleteAllClicked = {
+                    sharedViewModel.action.value = Action.DELETE_ALL
+                }
             )
         }
 
@@ -85,7 +88,7 @@ fun ListAppBar(
 fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit,
+    onDeleteAllClicked: () -> Unit,
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -101,7 +104,7 @@ fun DefaultListAppBar(
             ListAppBarActions(
                 onSearchClicked,
                 onSortClicked,
-                onDeleteClicked
+                onDeleteAllClicked
             )
         }
     )
@@ -111,11 +114,11 @@ fun DefaultListAppBar(
 fun ListAppBarActions(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit
+    onDeleteAllClicked: () -> Unit
 ) {
     SearchAction(onSearchClicked)
     SortAction(onSortClicked)
-    DeleteAllAction(onDeleteClicked)
+    DeleteAllAction(onDeleteAllClicked)
 }
 
 @Composable
@@ -312,7 +315,7 @@ fun ListAppBarPreview() {
     DefaultListAppBar(
         onSearchClicked = {},
         onSortClicked = {},
-        onDeleteClicked = {},
+        onDeleteAllClicked = {},
     )
 }
 
