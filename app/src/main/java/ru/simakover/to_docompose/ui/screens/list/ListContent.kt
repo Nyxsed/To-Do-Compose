@@ -4,7 +4,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,36 +26,51 @@ import ru.simakover.to_docompose.data.models.ToDoTask
 import ru.simakover.to_docompose.ui.theme.LARGE_PADDING
 import ru.simakover.to_docompose.ui.theme.PRIORITY_INDICATOR_SIZE
 import ru.simakover.to_docompose.util.RequestState
+import ru.simakover.to_docompose.util.SearchAppBarState
 
 @Composable
 fun ListContent(
-    tasks: RequestState<List<ToDoTask>>,
+    allTasks: RequestState<List<ToDoTask>>,
+    searchedTasks: RequestState<List<ToDoTask>>,
+    searchAppBarState: SearchAppBarState,
+    navigateToTaskScreen: (taskId: Int) -> Unit,
+) {
+    if (searchAppBarState == SearchAppBarState.TRIGGERED) {
+        if (searchedTasks is RequestState.Success) {
+            HandleListContent(tasks = searchedTasks.data, navigateToTaskScreen)
+        }
+    } else {
+        if (allTasks is RequestState.Success) {
+            HandleListContent(tasks = allTasks.data, navigateToTaskScreen)
+        }
+    }
+}
+
+@Composable
+fun HandleListContent(
+    tasks: List<ToDoTask>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    if(tasks is RequestState.Success) {
-        when(tasks.data) {
-            emptyList<ToDoTask>() -> {
-                EmptyContent()
-            }
-            else -> {
-                LazyColumn{
-                    items(
-                        items = tasks.data,
-                        key = { task->
-                            task.id
-                        }
-                    ) { task ->
-                        TaskItem(
-                            toDoTask = task,
-                            navigateToTaskScreen = navigateToTaskScreen
-                        )
+    when (tasks) {
+        emptyList<ToDoTask>() -> {
+            EmptyContent()
+        }
+        else -> {
+            LazyColumn {
+                items(
+                    items = tasks,
+                    key = { task ->
+                        task.id
                     }
+                ) { task ->
+                    TaskItem(
+                        toDoTask = task,
+                        navigateToTaskScreen = navigateToTaskScreen
+                    )
                 }
             }
         }
     }
-
-
 }
 
 @Composable
@@ -96,12 +110,12 @@ fun TaskItem(
                         .weight(1f),
                     contentAlignment = Alignment.CenterEnd,
 
-                ) {
+                    ) {
                     Canvas(
                         modifier = Modifier
                             .width(PRIORITY_INDICATOR_SIZE)
                             .height(PRIORITY_INDICATOR_SIZE)
-                    ){
+                    ) {
                         drawCircle(
                             color = toDoTask.priority.color
                         )

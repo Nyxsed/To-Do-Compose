@@ -33,6 +33,24 @@ class SharedViewModel @Inject constructor(
     val searchAppBarState: MutableState<SearchAppBarState> = mutableStateOf(SearchAppBarState.CLOSED)
     val searchTextState: MutableState<String> = mutableStateOf("")
 
+    private val _searchedTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
+    val searchedTasks: StateFlow<RequestState<List<ToDoTask>>> = _searchedTasks
+
+    fun searchDatabase(searchQuery: String) {
+        _searchedTasks.value = RequestState.Loading
+
+        try {
+            viewModelScope.launch {
+                repository.searchDatabase(searchQuery = "%$searchQuery%").collect {
+                    _searchedTasks.value = RequestState.Success(it)
+                }
+            }
+        } catch (e: Exception) {
+            _searchedTasks.value = RequestState.Error(e)
+        }
+        searchAppBarState.value = SearchAppBarState.TRIGGERED
+    }
+
     private val _allTasks = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
     val allTasks: StateFlow<RequestState<List<ToDoTask>>> = _allTasks
 
@@ -70,6 +88,7 @@ class SharedViewModel @Inject constructor(
             )
             repository.addTask(toDoTask)
         }
+        searchAppBarState.value = SearchAppBarState.CLOSED
     }
 
     private fun updateTask(){
@@ -100,9 +119,11 @@ class SharedViewModel @Inject constructor(
         when (action) {
             Action.ADD -> {
                 addTask()
+                updateAction(Action.NO_ACTION)
             }
             Action.UPDATE -> {
                 updateTask()
+                updateAction(Action.NO_ACTION)
             }
             Action.DELETE -> {
                 deleteTask()
@@ -111,13 +132,13 @@ class SharedViewModel @Inject constructor(
 
             }
             Action.UNDO -> {
-
+                addTask()
+                updateAction(Action.NO_ACTION)
             }
             else -> {
                 // No action needed
             }
         }
-        this.action.value = Action.NO_ACTION
     }
 
     fun updateTaskFields(selectedTask: ToDoTask?) {
@@ -142,5 +163,9 @@ class SharedViewModel @Inject constructor(
 
     fun validateFields(): Boolean {
         return title.value.isNotEmpty() && description.value.isNotEmpty()
+    }
+
+    fun updateAction(newAction: Action) {
+        action.value = newAction
     }
 }

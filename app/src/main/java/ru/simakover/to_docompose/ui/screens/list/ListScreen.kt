@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,7 +36,9 @@ fun ListScreen(
     }
 
     val action by sharedViewModel.action
+
     val allTasks by sharedViewModel.allTasks.collectAsState()
+    val searchedTasks by sharedViewModel.searchedTasks.collectAsState()
 
     val searchAppBarState: SearchAppBarState by sharedViewModel.searchAppBarState
     val searchTextState: String by sharedViewModel.searchTextState
@@ -47,7 +50,11 @@ fun ListScreen(
         snackbarHostState = snackBarHostState,
         handeDataBaseActions = { sharedViewModel.handleDatabaseActions(action) },
         taskTitle = sharedViewModel.title.value,
-        action = sharedViewModel.action.value
+        action = sharedViewModel.action.value,
+        onUndoClicked = {
+            sharedViewModel.action.value = it
+        },
+        onComplete = { sharedViewModel.updateAction(newAction = it) },
     )
 
     Scaffold(
@@ -60,8 +67,10 @@ fun ListScreen(
                     .padding(innerPadding)
             ) {
                 ListContent(
-                    tasks = allTasks,
-                    navigateToTaskScreen = navigateToTaskScreen
+                    allTasks = allTasks,
+                    navigateToTaskScreen = navigateToTaskScreen,
+                    searchedTasks = searchedTasks,
+                    searchAppBarState = searchAppBarState
                 )
             }
         },
@@ -98,6 +107,8 @@ fun ListFab(
 fun DisplaySnackBar(
     snackbarHostState: SnackbarHostState,
     handeDataBaseActions: () -> Unit,
+    onUndoClicked: (Action) -> Unit,
+    onComplete: (Action) -> Unit,
     taskTitle: String,
     action: Action
 ) {
@@ -108,9 +119,24 @@ fun DisplaySnackBar(
         if (action != Action.NO_ACTION) {
             scope.launch {
                 val snackBarResult = snackbarHostState.showSnackbar(
-                    message = "${action.name}. $taskTitle", "OK", duration = SnackbarDuration.Short
+                    message = "${action.name}. $taskTitle",
+                    actionLabel = setActionLabel(action),
+                    duration = SnackbarDuration.Short
                 )
+                if (snackBarResult == SnackbarResult.ActionPerformed && action == Action.DELETE) {
+                    onUndoClicked(Action.UNDO)
+                } else if (snackBarResult == SnackbarResult.Dismissed || action != Action.DELETE) {
+                    onComplete(Action.NO_ACTION)
+                }
             }
         }
+    }
+}
+
+private fun setActionLabel(action: Action): String {
+    return if (action.name == "DELETE") {
+        "UNDO"
+    } else {
+        "OK"
     }
 }
