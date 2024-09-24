@@ -5,10 +5,10 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import ru.simakover.to_docompose.navigation.destinations.listComposable
+import ru.simakover.to_docompose.navigation.destinations.splashComposable
 import ru.simakover.to_docompose.navigation.destinations.taskComposable
 import ru.simakover.to_docompose.ui.viewmodels.SharedViewModel
-import ru.simakover.to_docompose.util.Constants.LIST_SCREEN
-import javax.inject.Inject
+import ru.simakover.to_docompose.util.Constants.SPLASH_SCREEN
 
 @Composable
 fun SetupNavigation(
@@ -21,7 +21,7 @@ fun SetupNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = LIST_SCREEN
+        startDestination = SPLASH_SCREEN
     ) {
         listComposable(
             navigateToTaskScreen = routes.toTaskScreen,
@@ -30,6 +30,9 @@ fun SetupNavigation(
         taskComposable(
             sharedViewModel = sharedViewModel,
             navigateToListScreen = routes.toListScreen
+        )
+        splashComposable(
+            navigateToListScreen = routes.fromSplashScreen
         )
     }
 }
